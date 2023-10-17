@@ -14,13 +14,14 @@ import crossStaticIcon from "../utils/media/cross-icon.png";
 import crossActiveIcon from "../utils/media/cross-icon-active.png";
 import { useTypedDispatch } from '../utils/hooks';
 import { Thunks } from '../store/thunks';
+import { useMediaQuery } from '@mui/material';
 
 
 const Container = styled("div")({
     borderStyle: "solid",
     borderWidth: "0.5px",
     borderColor: "var(--text)",
-    height: "5vw",
+    height: "9vh",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -36,8 +37,8 @@ const Bullet = styled("div")({
     borderWidth: "1px",
     borderColor: "var(--text)",
     borderRadius: "100%",
-    width: "2em",
-    height: "2em",
+    width: "3vmax",
+    height: "3vmax",
     position: "relative",
     left: "1.5vw"
 })
@@ -51,7 +52,7 @@ const TodoText = styled("span")({
 
 const Tools = styled("div")({
     position: "absolute",
-    right: "3vw",
+    right: "2vw",
     height: "100%",
     display: "flex",
     flexDirection: "row",
@@ -59,7 +60,7 @@ const Tools = styled("div")({
 })
 
 const ToolIcon = styled("img")({
-    height: "70%",
+    height: "5vmax",
     margin: "0 0.2vw"
 })
 
@@ -75,6 +76,24 @@ const Todo: FC<IProps> = ({body, color, finished, id}) => {
     const [tickIcon, setTickIcon] = useState(tickStaticIcon);
     const [trashIcon, setTrashIcon] = useState(trashStaticIcon);
     const [crossIcon, setCrossIcon] = useState(crossStaticIcon);
+    const devicesWidth = {
+        1024: useMediaQuery("(max-width:1024px)"),
+        1366: useMediaQuery("(max-width:1366px)"),
+        724: useMediaQuery("(max-width:724px)")
+    }
+    const todoTextResponsive = () => {
+        let fontSize: string = "";
+        if (devicesWidth[724]) {
+            fontSize = "0.5em";
+        } else if (devicesWidth[1024]) {
+            fontSize = "1em";
+        } else if (devicesWidth[1366]) {
+            fontSize = "1.5em";
+        } else {
+            return {}
+        }
+        return {fontSize}
+    }
     const dispatch = useTypedDispatch();
 
     function unFinishTodo() {
@@ -94,7 +113,7 @@ const Todo: FC<IProps> = ({body, color, finished, id}) => {
             
             <Container>
                 <Bullet style={{backgroundColor: color}}></Bullet>
-                <TodoText>{ !finished ? body : <s>{body}</s>}</TodoText>
+                <TodoText style={todoTextResponsive()}>{ !finished ? body : <s>{body}</s>}</TodoText>
                 <Tools>
                     { !finished
                         ? <ToolIcon onClick={finishTodo} src={tickIcon} onMouseEnter={() => setTickIcon(tickActiveIcon)} onMouseLeave={() => setTickIcon(tickStaticIcon)}/>

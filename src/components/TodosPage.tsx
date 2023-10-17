@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { TextField, useMediaQuery } from '@mui/material';
 import { styled } from '@mui/system';
 import { FC, useEffect, useState } from 'react';
 import Popup from './Popup';
@@ -27,7 +27,7 @@ const AddTaskButton = styled("button")({
     borderRadius: "10px",
     fontFamily: "'Encode Sans', sans-serif",
     width: "23vw",
-    height: "6vh",
+    height: "8vh",
     marginTop: "1.5vh",
     cursor: "pointer",
     fontWeight: "600"
@@ -80,6 +80,44 @@ const TodosPage: FC = () => {
     const [newTaskForm, setNewTaskForm] = useState<{ body: string, color: string }>({ body: "", color: "" })
     const { error, todos, totalTodosCount } = useTypedSelector(state => state);
     const [page, setPage] = useState<number>(1);
+    const devicesWidth = {
+        1024: useMediaQuery("(max-width:1024px)"),
+        1366: useMediaQuery("(max-width:1366px)"),
+        724: useMediaQuery("(max-width:724px)"),
+        850: useMediaQuery("(max-width:850px)"),
+        677: useMediaQuery("(max-width:677px)"),
+    }
+    const createTodoBtnResponsive = () => {
+        let fontSize: string = "";
+        if (devicesWidth[677]) {
+            fontSize = "0.5em";
+        } else if (devicesWidth[850]) {
+            fontSize = "1em";
+        } else if (devicesWidth[1366]) {
+            fontSize = "1.5em";
+        } else {
+            return {};
+        }
+        return {fontSize}
+    }
+    const addTodoPopupResponsive = () => {
+        let width: string = "";
+        if (devicesWidth[724]) {
+            width = "289px";
+        } else {
+            return {}
+        }
+        return {width}
+    }
+    const newTaskParametersResponsive = () => {
+        let width: string = "";
+        if (devicesWidth[724]) {
+            width = "145px";
+        } else {
+            return {}
+        }
+        return {width}
+    }
     function addTask() {
         dispatch(Thunks.addTodo({ ...newTaskForm, color: newTaskForm.color || "#000000"}));
         setNewTaskForm({body: "", color: ""});
@@ -92,8 +130,9 @@ const TodosPage: FC = () => {
     return (
         <>
             <Popup state={newTasksPopup} setState={setNewTaskPopup}>
-                <AddTodoContainer>
+                <AddTodoContainer style={addTodoPopupResponsive()}>
                     <BodyInput
+                        style={newTaskParametersResponsive()}
                         label="Body"
                         variant="outlined"
                         error={error.type === "body" ? true : false}
@@ -102,15 +141,16 @@ const TodosPage: FC = () => {
                         value={newTaskForm.body}
                     />
                     <BulletColorInput
+                        style={newTaskParametersResponsive()}
                         type="color"
                         label="Choose bullet color"
                         onChange={e => setNewTaskForm(prev => ({ ...prev, color: e.target.value }))}
                     />
-                    <CreateTaskBtn onClick={addTask}>Add</CreateTaskBtn>
+                    <CreateTaskBtn style={newTaskParametersResponsive()} onClick={addTask}>Add</CreateTaskBtn>
                 </AddTodoContainer>
             </Popup>
             <Container>
-                <AddTaskButton onClick={() => setNewTaskPopup(true)}>Create new task</AddTaskButton>
+                <AddTaskButton style={createTodoBtnResponsive()} onClick={() => setNewTaskPopup(true)}>Create new task</AddTaskButton>
                 {todos
                     ? <TasksForm>
                         {todos.map(todo => <Todo body={todo.body} color={todo.color} key={todo.id} id={todo.id} finished={todo.finished} />)}

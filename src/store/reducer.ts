@@ -13,6 +13,7 @@ interface initialStateType {
     pending: boolean;
     error: IServerError["error"],
     totalTodosCount: number
+    signupSuccess: null | boolean
 }
 
 const initialState: initialStateType = {
@@ -22,6 +23,7 @@ const initialState: initialStateType = {
         username: "",
         email: ""
     },
+    signupSuccess: null,
     todos: [],
     totalTodosCount: 0,
     loading: false,
@@ -40,11 +42,12 @@ const slice = createSlice({
         }
     },
     extraReducers: builder => {
-        builder.addCase(Thunks.signup.fulfilled, state => { state.loading = false })
+        builder.addCase(Thunks.signup.fulfilled, state => { state.loading = false; state.signupSuccess = true })
         builder.addCase(Thunks.signup.pending, state => { state.error = {type: "", message: ""} })
         builder.addCase(Thunks.signup.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload || state.error;
+            state.signupSuccess = false;
         })
 
         builder.addCase(Thunks.signin.fulfilled, state => { state.loading = false })

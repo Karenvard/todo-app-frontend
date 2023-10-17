@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@mui/material";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {RootDispatch, RootState} from "../store/store";
 

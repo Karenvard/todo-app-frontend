@@ -2,7 +2,7 @@ import { styled } from '@mui/system';
 import { FC, useState } from 'react';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
-import { Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Checkbox, FormControlLabel, TextField, useMediaQuery } from '@mui/material';
 import { useTypedDispatch, useTypedSelector } from '../utils/hooks';
 import { Thunks } from '../store/thunks';
 
@@ -55,11 +55,46 @@ const SignupPage: FC = () => {
     function onSignin() {
         dispatch(Thunks.signin({...userForm}));
     }
+    const devicesWidth = {
+        1124: useMediaQuery("(max-width:1124px)"),
+        900: useMediaQuery("(max-width:900px)")
+    }
+    const signBtnResponsive = () => {
+        let fontSize: string = "";
+        let width: string = "";
+        if (devicesWidth[900]) {
+            fontSize = "1em";
+            width = "162px";
+        } else if (devicesWidth[1124]) {
+            fontSize = "1em";
+        } else {
+            return {}
+        }
+        return {fontSize, width}
+    }
+    const formResponsive = () => {
+        let width: string = "";
+        if (devicesWidth[900]) {
+            width = "270px"
+        } else {
+            return {}
+        }
+        return {width}
+    }
+    const fieldResponsive = () => {
+        let width: string = "";
+        if (devicesWidth[900]) {
+            width = "162px";
+        } else {
+            return {width: "15vw", margin: "1vh", color: "var(--text)"}
+        }
+        return {width, margin: "1vh", color: "var(--text)"}
+    }
     return (
         <Container>
-            <Form>
+            <Form style={formResponsive()}>
                 <TextField
-                    sx={TextFieldSxProp}
+                    sx={fieldResponsive()}
                     id="input-with-icon-textfield"
                     label="Username or email"
                     InputProps={{
@@ -76,7 +111,7 @@ const SignupPage: FC = () => {
                     helperText={error.type === "signin-field" ? error.message : null}
                 />
                 <TextField
-                    sx={TextFieldSxProp}
+                    sx={fieldResponsive()}
                     id="input-with-icon-textfield"
                     label="Password"
                     variant="outlined"
@@ -88,7 +123,7 @@ const SignupPage: FC = () => {
                 />
                 <FormControlLabel sx={{marginTop: "1.3vh"}} control={<Checkbox checked={userForm.rememberMe} onChange={e => setUserForm(prev => ({...prev, rememberMe: e.target.checked}))} defaultChecked />} label="Remember me" />
 
-                <SigninBtn onClick={onSignin}>Sign in</SigninBtn>
+                <SigninBtn style={signBtnResponsive()} onClick={onSignin}>Sign in</SigninBtn>
             </Form>
         </Container>
     );

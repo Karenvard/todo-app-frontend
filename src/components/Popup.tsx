@@ -27,8 +27,8 @@ const CloseBtn = styled("div")({
     cursor: "pointer",
     position: "absolute",
     backgroundColor: "var(--primary-button)",
-    width: "5vw",
-    height: "9.4vh",
+    width: "5vmax",
+    height: "5vmax",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -42,7 +42,7 @@ const CloseBtn = styled("div")({
 })
 
 const Line = styled("div")({
-    width: "4em",
+    width: "90%",
     height: "0.7vh",
     backgroundColor: "var(--secondary-button)",
     position: "absolute"
