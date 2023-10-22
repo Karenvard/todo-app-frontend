@@ -5,8 +5,8 @@ import {TypedServerMessage} from "./interfaces/TypedServerMessage";
 import {IUser} from "./interfaces/IUser";
 import {ITodo} from "./interfaces/ITodo";
 
-const $host = axios.create({baseURL: "http://localhost:5555", validateStatus: () => true});
-const $authHost = axios.create({baseURL: "http://localhost:5555", validateStatus: () => true});
+const $host = axios.create({baseURL: "https://todo-app-server-karenvard.onrender.com", validateStatus: () => true});
+const $authHost = axios.create({baseURL: "https://todo-app-server-karenvard.onrender.com", validateStatus: () => true});
 $authHost.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${localStorage.getItem("jwt-token")}`;
     return config;

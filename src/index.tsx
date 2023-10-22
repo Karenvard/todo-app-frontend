@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-    <BrowserRouter>
+    <BrowserRouter basename="/todo-app-frontend">
         <Provider store={Store}>
             <ToastContainer/>
             <App />
